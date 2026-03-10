@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { DataExportImport } from '@/components/data-export-import';
 
 export default function OthersPage() {
   return (
@@ -9,6 +10,8 @@ export default function OthersPage() {
           分類管理や資産シミュレーションなど、補助的な機能はこちらから利用できます。
         </p>
       </div>
+
+      <DataExportImport />
 
       <div className="grid gap-4 md:grid-cols-2">
         <Link
