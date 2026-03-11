@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { Nav } from '@/components/nav';
+import { SyncProvider } from '@/components/sync-provider';
 
 export const metadata: Metadata = {
   title: '収支管理アプリ',
@@ -27,7 +28,9 @@ export default function RootLayout({
             <Nav />
           </div>
         </header>
-        <main className="mx-auto max-w-6xl px-3 py-4 sm:px-4 sm:py-6">{children}</main>
+        <main className="mx-auto max-w-6xl px-3 py-4 sm:px-4 sm:py-6">
+          <SyncProvider>{children}</SyncProvider>
+        </main>
       </body>
     </html>
   );

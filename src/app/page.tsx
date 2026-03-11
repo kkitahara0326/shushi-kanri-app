@@ -9,6 +9,7 @@ import { StackedBarChart } from '@/components/stacked-bar-chart';
 import { CategoryPieChart } from '@/components/category-pie-chart';
 import { BreakdownTable } from '@/components/breakdown-table';
 import { MonthlyBalanceTable } from '@/components/monthly-balance-table';
+import { useSync } from '@/components/sync-provider';
 
 const INCOME_CHART_COLORS = ['#22c55e', '#4ade80', '#86efac', '#bbf7d0'];
 const EXPENSE_CHART_COLORS = ['#b91c1c', '#dc2626', '#ef4444', '#f97316', '#eab308'];
@@ -53,6 +54,7 @@ export default function DashboardPage() {
   const [startKey, setStartKey] = useState<string>('');
   const [endKey, setEndKey] = useState<string>('');
 
+  const { isSynced } = useSync();
   const load = useCallback(() => {
     const cats = getCategories();
     const ents = getEntries();
@@ -65,6 +67,10 @@ export default function DashboardPage() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (isSynced) load();
+  }, [isSynced, load]);
 
   const monthOptions = useMemo(() => {
     // 少なくとも 2023/07 から選べるようにする（要件）

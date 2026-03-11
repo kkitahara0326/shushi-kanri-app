@@ -5,6 +5,7 @@ import type { Category, MonthlyEntry } from '@/lib/types';
 import { getCategories, getEntries, getEntry, upsertEntry } from '@/lib/storage';
 import { getCategoriesForType } from '@/lib/utils';
 import { formatYen } from '@/lib/utils';
+import { useSync } from '@/components/sync-provider';
 
 const INCOME_COLORS = ['#22c55e', '#4ade80', '#86efac', '#bbf7d0'];
 // ダッシュボードの支出グラフと揃えたカラーセット
@@ -22,6 +23,7 @@ export function MonthlyRecordForm() {
   const incomeCats = getCategoriesForType(categories, 'income');
   const expenseCats = getCategoriesForType(categories, 'expense');
 
+  const { isSynced } = useSync();
   const load = useCallback(() => {
     setCategories(getCategories());
     setEntries(getEntries());
@@ -30,6 +32,10 @@ export function MonthlyRecordForm() {
   useEffect(() => {
     load();
   }, [load]);
+
+  useEffect(() => {
+    if (isSynced) load();
+  }, [isSynced, load]);
 
   // 年月または分類の数が変わったときだけフォームを再セット（incomeCats/expenseCats を依存に含めると毎レンダーで上書きされて入力できなくなる）
   useEffect(() => {

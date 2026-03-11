@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Category, EntryType } from '@/lib/types';
 import {
   addCategory,
@@ -9,8 +9,10 @@ import {
   updateCategory,
 } from '@/lib/storage';
 import { getCategoriesForType } from '@/lib/utils';
+import { useSync } from '@/components/sync-provider';
 
 export function CategoryManager() {
+  const { isSynced } = useSync();
   const [categories, setCategories] = useState<Category[]>(() => getCategories());
   const [newName, setNewName] = useState('');
   const [newType, setNewType] = useState<EntryType>('expense');
@@ -18,6 +20,10 @@ export function CategoryManager() {
   const [editName, setEditName] = useState('');
 
   const refresh = useCallback(() => setCategories(getCategories()), []);
+
+  useEffect(() => {
+    if (isSynced) refresh();
+  }, [isSynced, refresh]);
 
   const incomeCats = getCategoriesForType(categories, 'income');
   const expenseCats = getCategoriesForType(categories, 'expense');
